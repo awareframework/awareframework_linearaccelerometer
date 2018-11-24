@@ -24,21 +24,18 @@ public class SwiftAwareframeworkLinearaccelerometerPlugin: AwareFlutterPluginCor
         }
     }
 
-
     public override init() {
         super.init()
         super.initializationCallEventHandler = self
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        // add own channel
-        super.setChannels(with: registrar,
-                          instance: SwiftAwareframeworkLinearaccelerometerPlugin(),
-                          methodChannelName: "awareframework_linearaccelerometer/method",
-                          eventChannelName: "awareframework_linearaccelerometer/event")
+        let instance = SwiftAwareframeworkLinearaccelerometerPlugin()
 
+        super.setMethodChannel(with: registrar, instance: instance, channelName: "awareframework_linearaccelerometer/method")
+        super.setEventChannels(with: registrar, instance: instance, channelNames: ["awareframework_linearaccelerometer/event"])
+        
     }
-
 
     public func onDataChanged(data: LinearAccelerometerData) {
         for handler in self.streamHandlers {

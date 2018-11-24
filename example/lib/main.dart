@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  LinearaccelerometerSensor sensor;
+  LinearAccelerometerSensor sensor;
   LinearaccelerometerSensorConfig config;
 
   @override
@@ -24,20 +24,20 @@ class _MyAppState extends State<MyApp> {
     config = LinearaccelerometerSensorConfig()
       ..debug = true;
 
-    sensor = new LinearaccelerometerSensor(config);
+    sensor = new LinearAccelerometerSensor(config);
+
+    sensor.start();
 
   }
 
   @override
   Widget build(BuildContext context) {
-
-
     return new MaterialApp(
       home: new Scaffold(
           appBar: new AppBar(
             title: const Text('Plugin Example App'),
           ),
-          body: new LinearaccelerometerCard(sensor: sensor,)
+          body: new LinearAccelerometerCard(sensor: sensor,)
       ),
     );
   }
