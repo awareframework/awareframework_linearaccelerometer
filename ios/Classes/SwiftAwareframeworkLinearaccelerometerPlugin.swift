@@ -1,6 +1,5 @@
 import Flutter
 import UIKit
-import SwiftyJSON
 import com_awareframework_ios_sensor_linearaccelerometer
 import com_awareframework_ios_sensor_core
 import awareframework_core
@@ -12,8 +11,7 @@ public class SwiftAwareframeworkLinearaccelerometerPlugin: AwareFlutterPluginCor
     public func initializeSensor(_ call: FlutterMethodCall, result: @escaping FlutterResult) -> AwareSensor? {
         if self.sensor == nil {
             if let config = call.arguments as? Dictionary<String,Any>{
-                let json = JSON.init(config)
-                self.linearAccelerometerSensor = LinearAccelerometerSensor.init(LinearAccelerometerSensor.Config(json))
+                self.linearAccelerometerSensor = LinearAccelerometerSensor.init(LinearAccelerometerSensor.Config(config))
             }else{
                 self.linearAccelerometerSensor = LinearAccelerometerSensor.init(LinearAccelerometerSensor.Config())
             }

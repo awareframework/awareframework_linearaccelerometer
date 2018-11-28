@@ -15,13 +15,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   LinearAccelerometerSensor sensor;
-  LinearaccelerometerSensorConfig config;
+  LinearAccelerometerSensorConfig config;
 
   @override
   void initState() {
     super.initState();
 
-    config = LinearaccelerometerSensorConfig()
+    config = LinearAccelerometerSensorConfig()
+      ..frequency = 100
+      ..dbType = 1
       ..debug = true;
 
     sensor = new LinearAccelerometerSensor(config);

@@ -3,34 +3,40 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:awareframework_core/awareframework_core.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 /// init sensor
 class LinearAccelerometerSensor extends AwareSensorCore {
   static const MethodChannel _linearAccelerometerMethod = const MethodChannel('awareframework_linearaccelerometer/method');
   static const EventChannel  _linearAccelerometerStream  = const EventChannel('awareframework_linearaccelerometer/event');
 
-  /// Init Linearaccelerometer Sensor with LinearaccelerometerSensorConfig
-  LinearAccelerometerSensor(LinearaccelerometerSensorConfig config):this.convenience(config);
+  /// Init LinearAccelerometer Sensor with LinearAccelerometerSensorConfig
+  LinearAccelerometerSensor(LinearAccelerometerSensorConfig config):this.convenience(config);
   LinearAccelerometerSensor.convenience(config) : super(config){
-    /// Set sensor method & event channels
     super.setMethodChannel(_linearAccelerometerMethod);
   }
 
   /// A sensor observer instance
-  Stream<Map<String,dynamic>> onDataChanged(String id) {
-     return super.getBroadcastStream(_linearAccelerometerStream, "on_data_changed", id).map((dynamic event) => Map<String,dynamic>.from(event));
+  Stream<Map<String,dynamic>> get onDataChanged {
+     return super.getBroadcastStream(_linearAccelerometerStream, "on_data_changed").map((dynamic event) => Map<String,dynamic>.from(event));
+  }
+
+  @override
+  void cancelAllEventChannels() {
+    super.cancelBroadcastStream("on_data_changed");
   }
 }
 
-class LinearaccelerometerSensorConfig extends AwareSensorConfig{
-  LinearaccelerometerSensorConfig();
-
-  /// TODO
+class LinearAccelerometerSensorConfig extends AwareSensorConfig{
+  int frequency    = 5;
+  double period    = 1.0;
+  double threshold = 0.0;
 
   @override
   Map<String, dynamic> toMap() {
     var map = super.toMap();
+    map['frequency'] = frequency;
+    map['period']    = period;
+    map['threshold'] = threshold;
     return map;
   }
 }
@@ -39,14 +45,12 @@ class LinearaccelerometerSensorConfig extends AwareSensorConfig{
 class LinearAccelerometerCard extends StatefulWidget {
   LinearAccelerometerCard({Key key,
                           @required this.sensor,
-                          this.cardId = "linear_accelerometer_card",
                           this.height = 250.0,
                           this.bufferSize = 299}) : super(key: key);
 
-  LinearAccelerometerSensor sensor;
-  String cardId;
-  double height;
-  int bufferSize;
+  final LinearAccelerometerSensor sensor;
+  final double height;
+  final int bufferSize;
 
   @override
   LinearAccelerometerCardState createState() => new LinearAccelerometerCardState();
@@ -64,7 +68,7 @@ class LinearAccelerometerCardState extends State<LinearAccelerometerCard> {
 
     super.initState();
     // set observer
-    widget.sensor.onDataChanged(widget.cardId).listen((event) {
+    widget.sensor.onDataChanged.listen((event) {
       setState((){
         if(event!=null){
           DateTime.fromMicrosecondsSinceEpoch(event['timestamp']);
@@ -76,7 +80,7 @@ class LinearAccelerometerCardState extends State<LinearAccelerometerCard> {
     }, onError: (dynamic error) {
         print('Received error: ${error.message}');
     });
-    print(widget.sensor);
+    // print(widget.sensor);
   }
 
 
@@ -91,13 +95,6 @@ class LinearAccelerometerCardState extends State<LinearAccelerometerCard> {
       title: "Linear Accelerometer",
       sensor: widget.sensor
     );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    widget.sensor.cancelBroadcastStream(widget.cardId);
-    super.dispose();
   }
 
 }
