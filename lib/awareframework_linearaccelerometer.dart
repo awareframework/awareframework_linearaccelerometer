@@ -51,6 +51,10 @@ class LinearAccelerometerCard extends StatefulWidget {
   final LinearAccelerometerSensor sensor;
   final double height;
   final int bufferSize;
+  var handler;
+  final List<LineSeriesData> dataLine1 = List<LineSeriesData>();
+  final List<LineSeriesData> dataLine2 = List<LineSeriesData>();
+  final List<LineSeriesData> dataLine3 = List<LineSeriesData>();
 
   @override
   LinearAccelerometerCardState createState() => new LinearAccelerometerCardState();
@@ -59,28 +63,29 @@ class LinearAccelerometerCard extends StatefulWidget {
 
 class LinearAccelerometerCardState extends State<LinearAccelerometerCard> {
 
-  List<LineSeriesData> dataLine1 = List<LineSeriesData>();
-  List<LineSeriesData> dataLine2 = List<LineSeriesData>();
-  List<LineSeriesData> dataLine3 = List<LineSeriesData>();
 
   @override
   void initState() {
 
     super.initState();
     // set observer
-    widget.sensor.onDataChanged.listen((event) {
-      setState((){
-        if(event!=null){
-          DateTime.fromMicrosecondsSinceEpoch(event['timestamp']);
-          StreamLineSeriesChart.add(data:event['x'], into:dataLine1, id:"x", buffer: widget.bufferSize);
-          StreamLineSeriesChart.add(data:event['y'], into:dataLine2, id:"y", buffer: widget.bufferSize);
-          StreamLineSeriesChart.add(data:event['z'], into:dataLine3, id:"z", buffer: widget.bufferSize);
+    //if(widget.handler == null){
+      widget.handler = widget.sensor.onDataChanged.listen((event) {
+        if(mounted){
+          setState((){
+            if(event!=null){
+              DateTime.fromMicrosecondsSinceEpoch(event['timestamp']);
+              StreamLineSeriesChart.add(data:event['x'], into:widget.dataLine1, id:"x", buffer: widget.bufferSize);
+              StreamLineSeriesChart.add(data:event['y'], into:widget.dataLine2, id:"y", buffer: widget.bufferSize);
+              StreamLineSeriesChart.add(data:event['z'], into:widget.dataLine3, id:"z", buffer: widget.bufferSize);
+            }
+          });
         }
-      });
-    }, onError: (dynamic error) {
+      }, onError: (dynamic error) {
         print('Received error: ${error.message}');
-    });
-    // print(widget.sensor);
+      });
+      print(widget.sensor);
+    //}
   }
 
 
@@ -90,11 +95,18 @@ class LinearAccelerometerCardState extends State<LinearAccelerometerCard> {
       contentWidget: SizedBox(
           height:widget.height,
           width: MediaQuery.of(context).size.width*0.8,
-          child: new StreamLineSeriesChart(StreamLineSeriesChart.createTimeSeriesData(dataLine1, dataLine2, dataLine3)),
+          child: new StreamLineSeriesChart(StreamLineSeriesChart.createTimeSeriesData(widget.dataLine1, widget.dataLine2, widget.dataLine3)),
         ),
       title: "Linear Accelerometer",
       sensor: widget.sensor
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    // widget.sensor.cancelAllEventChannels();
+    super.dispose();
   }
 
 }
