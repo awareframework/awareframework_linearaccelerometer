@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:awareframework_linearaccelerometer/awareframework_linearaccelerometer.dart';
 import 'package:awareframework_core/awareframework_core.dart';
 
@@ -23,10 +21,10 @@ class _MyAppState extends State<MyApp> {
 
     config = LinearAccelerometerSensorConfig()
       ..frequency = 100
-      ..dbType = 1
+      ..dbType = DatabaseType.DEFAULT
       ..debug = true;
 
-    sensor = new LinearAccelerometerSensor(config);
+    sensor = new LinearAccelerometerSensor.init(config);
 
     sensor.start();
 

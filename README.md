@@ -1,6 +1,8 @@
 # Aware Linearaccelerometer
 
-TODO
+[![Build Status](https://travis-ci.org/awareframework/awareframework_linearaccelerometer.svg?branch=master)](https://travis-ci.org/awareframework/awareframework_linearaccelerometer)
+
+The linear accelerometer measures the acceleration applied to the sensor built-in into the device, excluding the force of gravity.
 
 ## Install the plugin into project
 1. Edit `pubspec.yaml`
@@ -16,13 +18,14 @@ import 'package:awareframework_core/awareframework_core.dart';
 ```
 
 ## Public functions
-### linearaccelerometer Sensor
+### LinearAccelerometer Sensor
 - `start()`
 - `stop()` 
-- `sync(force: Boolean)`
+- `sync(boolean force)`
 - `enable()`
 - `disable()`
 - `isEnable()`
+- `setLabel(String label)`
 
 ### Configuration Keys
 TODO
@@ -45,19 +48,19 @@ The data representations is different between Android and iOS. Following links p
 ## Example usage
 ```dart
 // init config
-var config = LinearaccelerometerSensorConfig()
+var config = LinearAccelerometerSensorConfig()
   ..debug = true
   ..label = "label";
 
 // init sensor
-var sensor = new LinearaccelerometerSensor(config);
+var sensor = new LinearAccelerometerSensor(config);
 
-void mathod(){
+void method(){
     /// start 
     sensor.start();
     
     /// set observer
-    sensor.onDataChanged.listen((Map<String,dynamic> result){
+    sensor.onDataChanged.listen((LinearAccelerometerData data){
       setState((){
         // Your code here
       });
@@ -70,7 +73,7 @@ void mathod(){
     sensor.sync(true);  
     
     // make a sensor care by the following code
-    var card = new LinearaccelerometerCard(sensor:sensor);
+    var card = new LinearAccelerometerCard(sensor:sensor);
     // NEXT: Add the card instance into a target Widget.
 }
 

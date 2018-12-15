@@ -31,7 +31,9 @@ public class SwiftAwareframeworkLinearaccelerometerPlugin: AwareFlutterPluginCor
         let instance = SwiftAwareframeworkLinearaccelerometerPlugin()
 
         super.setMethodChannel(with: registrar, instance: instance, channelName: "awareframework_linearaccelerometer/method")
-        super.setEventChannels(with: registrar, instance: instance, channelNames: ["awareframework_linearaccelerometer/event"])
+        super.setEventChannels(with: registrar, instance: instance, channelNames:
+            ["awareframework_linearaccelerometer/event",
+             "awareframework_linearaccelerometer/event_on_data_changed"])
         
     }
 
