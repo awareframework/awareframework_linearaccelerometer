@@ -21,7 +21,7 @@ import 'package:awareframework_core/awareframework_core.dart';
 ### LinearAccelerometer Sensor
 - `start()`
 - `stop()` 
-- `sync(boolean force)`
+- `sync(bool force)`
 - `enable()`
 - `disable()`
 - `isEnable()`
@@ -53,7 +53,7 @@ var config = LinearAccelerometerSensorConfig()
   ..label = "label";
 
 // init sensor
-var sensor = new LinearAccelerometerSensor(config);
+var sensor = new LinearAccelerometerSensor.init(config);
 
 void method(){
     /// start 
